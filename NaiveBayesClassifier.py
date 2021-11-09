@@ -22,8 +22,14 @@ def makeDatasets(train,test):
     return (train_dataset_yes, train_dataset_no, test_dataset)
 
 def calculateProbability(x, mean, std):
-	exponent = math.exp(-(math.pow(x-mean,2)/(2*math.pow(std,2))))
-	return (1/(math.sqrt(2*math.pi)*std))*exponent
+    result = 1.0/(std * math.sqrt(2 * math.pi))
+    e_term = -0.5 * math.pow((x - mean)/std, 2)
+    result = result * math.pow(math.e, e_term)
+
+    if(result < math.pow(math.e, -10)):
+        result = math.pow(math.e,-10)
+
+    return result
 
 def classifier(train_dataset1, train_dataset2, testRow):
     train_dataset_yes = train_dataset1
